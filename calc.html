@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kalkulator</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .calc {
+      background: #fff;
+      padding: 16px;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,.15);
+      width: 300px;
+    }
+    #display {
+      width: 100%;
+      height: 60px;
+      font-size: 28px;
+      text-align: right;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+    .keys {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    button {
+      height: 56px;
+      font-size: 20px;
+      border: none;
+      border-radius: 8px;
+      background: #e4e6eb;
+      cursor: pointer;
+    }
+    button:active { background: #ccd0d5; }
+    .op { background: #ffb74d; }
+    .eq { background: #43a047; color: #fff; }
+    .clr { background: #e53935; color: #fff; }
+  </style>
+</head>
+<body>
+  <div class="calc">
+    <input type="text" id="display" readonly value="0">
+    <div class="keys">
+      <button class="clr" onclick="clearAll()">C</button>
+      <button onclick="backspace()">⌫</button>
+      <button class="op" onclick="add('%')">%</button>
+      <button class="op" onclick="add('/')">÷</button>
+
+      <button onclick="add('7')">7</button>
+      <button onclick="add('8')">8</button>
+      <button onclick="add('9')">9</button>
+      <button class="op" onclick="add('*')">×</button>
+
+      <button onclick="add('4')">4</button>
+      <button onclick="add('5')">5</button>
+      <button onclick="add('6')">6</button>
+      <button class="op" onclick="add('-')">−</button>
+
+      <button onclick="add('1')">1</button>
+      <button onclick="add('2')">2</button>
+      <button onclick="add('3')">3</button>
+      <button class="op" onclick="add('+')">+</button>
+
+      <button onclick="add('0')">0</button>
+      <button onclick="add('.')">.</button>
+      <button class="eq" onclick="calculate()" style="grid-column: span 2">=</button>
+    </div>
+  </div>
+
+  <script>
+    const display = document.getElementById('display');
+
+    function add(value) {
+      if (display.value === '0' && value !== '.' && !isNaN(value)) {
+        display.value = value;
+      } else {
+        display.value += value;
+      }
+    }
+
+    function clearAll() {
+      display.value = '0';
+    }
+
+    function backspace() {
+      display.value = display.value.slice(0, -1) || '0';
+    }
+
+    function calculate() {
+      const expr = display.value;
+      // hanya izinkan angka dan operator
+      if (!/^[0-9+\-*/%.() ]+$/.test(expr)) {
+        display.value = 'Error';
+        return;
+      }
+      try {
+        const result = Function('"use strict"; return (' + expr + ')')();
+        display.value = Number.isFinite(result)
+          ? String(Math.round(result * 1e10) / 1e10)
+          : 'Error';
+      } catch (e) {
+        display.value = 'Error';
+      }
+    }
+
+    // dukungan keyboard
+    document.addEventListener('keydown', function (e) {
+      if ('0123456789+-*/.%'.includes(e.key)) add(e.key);
+      else if (e.key === 'Enter') calculate();
+      else if (e.key === 'Backspace') backspace();
+      else if (e.key === 'Escape') clearAll();
+    });
+  </script>
+</body>
+  </html>
