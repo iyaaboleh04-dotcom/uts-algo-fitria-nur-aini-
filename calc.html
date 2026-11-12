@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Kalkulator</title>
+  <title>Kalkulator Ilmiah</title>
   <style>
     * { box-sizing: border-box; }
     body {
       font-family: Arial, sans-serif;
-      background: #f0f2f5;
+      background: #1c1c1e;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -16,66 +16,97 @@
       margin: 0;
     }
     .calc {
-      background: #fff;
-      padding: 16px;
-      border-radius: 16px;
-      box-shadow: 0 4px 16px rgba(0,0,0,.15);
-      width: 300px;
+      background: #2c2c2e;
+      padding: 14px;
+      border-radius: 20px;
+      width: 340px;
+      max-width: 100%;
     }
     #display {
       width: 100%;
-      height: 60px;
-      font-size: 28px;
+      height: 70px;
+      font-size: 30px;
       text-align: right;
       padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      margin-bottom: 12px;
+      background: #000;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+    .mode {
+      color: #aaa;
+      font-size: 13px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
     }
     .keys {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       gap: 8px;
     }
     button {
-      height: 56px;
-      font-size: 20px;
+      height: 50px;
+      font-size: 16px;
       border: none;
-      border-radius: 8px;
-      background: #e4e6eb;
+      border-radius: 10px;
+      background: #505054;
+      color: #fff;
       cursor: pointer;
     }
-    button:active { background: #ccd0d5; }
-    .op { background: #ffb74d; }
-    .eq { background: #43a047; color: #fff; }
-    .clr { background: #e53935; color: #fff; }
+    button:active { filter: brightness(1.3); }
+    .fn { background: #3a3a3e; font-size: 14px; }
+    .op { background: #ff9f0a; }
+    .eq { background: #30d158; }
+    .clr { background: #ff453a; }
   </style>
 </head>
 <body>
   <div class="calc">
+    <div class="mode">
+      <span>Kalkulator Ilmiah</span>
+      <span id="modeLabel">Mode: DEG</span>
+    </div>
     <input type="text" id="display" readonly value="0">
     <div class="keys">
+      <button class="fn" onclick="toggleMode()">DEG/RAD</button>
+      <button class="fn" onclick="add('sin(')">sin</button>
+      <button class="fn" onclick="add('cos(')">cos</button>
+      <button class="fn" onclick="add('tan(')">tan</button>
+      <button class="fn" onclick="add('√(')">√</button>
+
+      <button class="fn" onclick="add('log(')">log</button>
+      <button class="fn" onclick="add('ln(')">ln</button>
+      <button class="fn" onclick="add('π')">π</button>
+      <button class="fn" onclick="add('e')">e</button>
+      <button class="fn" onclick="add('^')">xʸ</button>
+
       <button class="clr" onclick="clearAll()">C</button>
-      <button onclick="backspace()">⌫</button>
-      <button class="op" onclick="add('%')">%</button>
+      <button class="fn" onclick="add('(')">(</button>
+      <button class="fn" onclick="add(')')">)</button>
+      <button class="fn" onclick="add('^2')">x²</button>
       <button class="op" onclick="add('/')">÷</button>
 
       <button onclick="add('7')">7</button>
       <button onclick="add('8')">8</button>
       <button onclick="add('9')">9</button>
+      <button class="fn" onclick="backspace()">⌫</button>
       <button class="op" onclick="add('*')">×</button>
 
       <button onclick="add('4')">4</button>
       <button onclick="add('5')">5</button>
       <button onclick="add('6')">6</button>
+      <button class="fn" onclick="add('%')">%</button>
       <button class="op" onclick="add('-')">−</button>
 
       <button onclick="add('1')">1</button>
       <button onclick="add('2')">2</button>
       <button onclick="add('3')">3</button>
+      <button class="fn" onclick="add('!')">n!</button>
       <button class="op" onclick="add('+')">+</button>
 
-      <button onclick="add('0')">0</button>
+      <button onclick="add('0')" style="grid-column: span 2">0</button>
       <button onclick="add('.')">.</button>
       <button class="eq" onclick="calculate()" style="grid-column: span 2">=</button>
     </div>
@@ -83,32 +114,73 @@
 
   <script>
     const display = document.getElementById('display');
+    const modeLabel = document.getElementById('modeLabel');
+    let degMode = true;
 
-    function add(value) {
-      if (display.value === '0' && value !== '.' && !isNaN(value)) {
-        display.value = value;
+    function add(v) {
+      if (display.value === 'Error') display.value = '0';
+      if (display.value === '0' && /^[0-9(πe]|^[a-z√]/.test(v)) {
+        display.value = v;
       } else {
-        display.value += value;
+        display.value += v;
       }
     }
 
-    function clearAll() {
-      display.value = '0';
-    }
+    function clearAll() { display.value = '0'; }
 
     function backspace() {
-      display.value = display.value.slice(0, -1) || '0';
+      const v = display.value;
+      if (v === 'Error') { display.value = '0'; return; }
+      display.value = v.replace(/(sin\(|cos\(|tan\(|log\(|ln\(|√\(|.)$/, '') || '0';
+    }
+
+    function toggleMode() {
+      degMode = !degMode;
+      modeLabel.textContent = 'Mode: ' + (degMode ? 'DEG' : 'RAD');
+    }
+
+    function fact(n) {
+      if (n < 0 || !Number.isInteger(n) || n > 170) throw new Error('fact');
+      let r = 1;
+      for (let i = 2; i <= n; i++) r *= i;
+      return r;
     }
 
     function calculate() {
-      const expr = display.value;
-      // hanya izinkan angka dan operator
-      if (!/^[0-9+\-*/%.() ]+$/.test(expr)) {
+      let expr = display.value;
+
+      const sisa = expr.replace(/sin|cos|tan|log|ln|π|√|e/g, '');
+      if (!/^[0-9+\-*/%.()^! ]*$/.test(sisa)) {
         display.value = 'Error';
         return;
       }
+
+      expr = expr.replace(/(\d+(\.\d+)?)!/g, 'fact($1)');
+
+      expr = expr
+        .replace(/π/g, 'PI')
+        .replace(/e/g, 'E')
+        .replace(/√/g, 'sqrt')
+        .replace(/\^/g, '**')
+        .replace(/(\d+(\.\d+)?)%/g, '($1/100)');
+
+      const toRad = x => degMode ? x * Math.PI / 180 : x;
+      const clean = r => Math.abs(r) < 1e-12 ? 0 : r;
+      const ctx = {
+        sin: x => clean(Math.sin(toRad(x))),
+        cos: x => clean(Math.cos(toRad(x))),
+        tan: x => clean(Math.tan(toRad(x))),
+        log: Math.log10,
+        ln: Math.log,
+        sqrt: Math.sqrt,
+        PI: Math.PI,
+        E: Math.E,
+        fact: fact
+      };
+
       try {
-        const result = Function('"use strict"; return (' + expr + ')')();
+        const fn = new Function(...Object.keys(ctx), '"use strict"; return (' + expr + ');');
+        const result = fn(...Object.values(ctx));
         display.value = Number.isFinite(result)
           ? String(Math.round(result * 1e10) / 1e10)
           : 'Error';
@@ -116,14 +188,6 @@
         display.value = 'Error';
       }
     }
-
-    // dukungan keyboard
-    document.addEventListener('keydown', function (e) {
-      if ('0123456789+-*/.%'.includes(e.key)) add(e.key);
-      else if (e.key === 'Enter') calculate();
-      else if (e.key === 'Backspace') backspace();
-      else if (e.key === 'Escape') clearAll();
-    });
   </script>
 </body>
-  </html>
+        </html>
