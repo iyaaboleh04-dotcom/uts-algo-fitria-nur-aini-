@@ -3,127 +3,112 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Kalkulator</title>
+  <title>UTS Project Algoritma - Fitria Nuraini</title>
   <style>
     * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
       background: #f0f2f5;
+      color: #222;
+    }
+    header {
+      background: #1c1c1e;
+      color: #fff;
+      padding: 14px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    header h1 { margin: 0 0 6px; font-size: 18px; }
+    nav a {
+      color: #ff9f0a;
+      text-decoration: none;
+      margin-right: 14px;
+      font-size: 14px;
+    }
+    .hero { text-align: center; padding: 28px 16px 8px; }
+    .avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background: #ff9f0a;
+      color: #fff;
+      font-size: 40px;
+      font-weight: bold;
       display: flex;
-      justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      margin: 0;
+      justify-content: center;
+      margin: 0 auto 12px;
     }
-    .calc {
+    .hero h2 { margin: 0; }
+    .hero p { margin: 4px 0 0; color: #666; }
+    section {
+      max-width: 700px;
+      margin: 20px auto;
+      padding: 20px 16px;
       background: #fff;
-      padding: 16px;
-      border-radius: 16px;
-      box-shadow: 0 4px 16px rgba(0,0,0,.15);
-      width: 300px;
+      border-radius: 14px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.08);
     }
-    #display {
+    section h2 { margin-top: 0; }
+    table { width: 100%; border-collapse: collapse; }
+    td { padding: 8px 4px; border-bottom: 1px solid #eee; vertical-align: top; }
+    td:first-child { width: 38%; color: #666; }
+    iframe {
       width: 100%;
-      height: 60px;
-      font-size: 28px;
-      text-align: right;
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      margin-bottom: 12px;
+      height: 620px;
+      border: 0;
+      border-radius: 12px;
+      background: #1c1c1e;
     }
-    .keys {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-    }
-    button {
-      height: 56px;
-      font-size: 20px;
-      border: none;
-      border-radius: 8px;
-      background: #e4e6eb;
-      cursor: pointer;
-    }
-    button:active { background: #ccd0d5; }
-    .op { background: #ffb74d; }
-    .eq { background: #43a047; color: #fff; grid-column: span 2; }
-    .clr { background: #e53935; color: #fff; }
+    footer { text-align: center; font-size: 13px; color: #777; padding: 16px; }
   </style>
 </head>
 <body>
-  <div class="calc">
-    <input type="text" id="display" readonly value="0">
-    <div class="keys">
-      <button class="clr" onclick="clearAll()">C</button>
-      <button onclick="backspace()">⌫</button>
-      <button class="op" onclick="add('%')">%</button>
-      <button class="op" onclick="add('/')">÷</button>
+  <header>
+    <h1>UTS Project Algoritma</h1>
+    <nav>
+      <a href="#biodata">Biodata</a>
+      <a href="#tentang">Tentang</a>
+      <a href="#kalkulator">Kalkulator</a>
+    </nav>
+  </header>
 
-      <button onclick="add('7')">7</button>
-      <button onclick="add('8')">8</button>
-      <button onclick="add('9')">9</button>
-      <button class="op" onclick="add('*')">×</button>
-
-      <button onclick="add('4')">4</button>
-      <button onclick="add('5')">5</button>
-      <button onclick="add('6')">6</button>
-      <button class="op" onclick="add('-')">−</button>
-
-      <button onclick="add('1')">1</button>
-      <button onclick="add('2')">2</button>
-      <button onclick="add('3')">3</button>
-      <button class="op" onclick="add('+')">+</button>
-
-      <button onclick="add('0')">0</button>
-      <button onclick="add('.')">.</button>
-      <button class="eq" onclick="calculate()">=</button>
-    </div>
+  <div class="hero">
+    <div class="avatar">F</div>
+    <h2>Fitria Nuraini</h2>
+    <p>Mahasiswa · UTS Algoritma</p>
   </div>
 
-  <script>
-    const display = document.getElementById('display');
+  <section id="biodata">
+    <h2>Biodata Mahasiswa</h2>
+    <table>
+      <tr><td>Nama</td><td>Fitria Nuraini</td></tr>
+      <tr><td>NIM</td><td>ISI_NIM</td></tr>
+      <tr><td>Kelas</td><td>ISI_KELAS</td></tr>
+      <tr><td>Program Studi</td><td>ISI_PRODI</td></tr>
+      <tr><td>Kampus</td><td>ISI_KAMPUS</td></tr>
+      <tr><td>Mata Kuliah</td><td>Algoritma</td></tr>
+      <tr><td>Dosen</td><td>ISI_NAMA_DOSEN</td></tr>
+    </table>
+  </section>
 
-    function add(value) {
-      if (display.value === 'Error') display.value = '0';
-      if (display.value === '0' && value !== '.' && !isNaN(value)) {
-        display.value = value;
-      } else {
-        display.value += value;
-      }
-    }
+  <section id="tentang">
+    <h2>Tentang Project</h2>
+    <p>
+      Website ini dibuat untuk UTS Project Algoritma. Isinya kalkulator
+      ilmiah (Level 3) yang dibuat dengan HTML, CSS, dan JavaScript.
+    </p>
+  </section>
 
-    function clearAll() {
-      display.value = '0';
-    }
+  <section id="kalkulator">
+    <h2>Kalkulator Ilmiah</h2>
+    <p>Mendukung sin, cos, tan, log, ln, akar, pangkat, faktorial, π, e, dan mode DEG/RAD.</p>
+    <iframe src="calc.html" title="Kalkulator Ilmiah"></iframe>
+  </section>
 
-    function backspace() {
-      if (display.value === 'Error') { display.value = '0'; return; }
-      display.value = display.value.slice(0, -1) || '0';
-    }
-
-    function calculate() {
-      const expr = display.value;
-      if (!/^[0-9+\-*/%.() ]+$/.test(expr)) {
-        display.value = 'Error';
-        return;
-      }
-      try {
-        const result = Function('"use strict"; return (' + expr + ')')();
-        display.value = Number.isFinite(result)
-          ? String(Math.round(result * 1e10) / 1e10)
-          : 'Error';
-      } catch (e) {
-        display.value = 'Error';
-      }
-    }
-
-    document.addEventListener('keydown', function (e) {
-      if ('0123456789+-*/.%'.includes(e.key)) add(e.key);
-      else if (e.key === 'Enter') calculate();
-      else if (e.key === 'Backspace') backspace();
-      else if (e.key === 'Escape') clearAll();
-    });
-  </script>
+  <footer>&copy; 2026 Fitria Nuraini</footer>
 </body>
-</html>
+  </html>
